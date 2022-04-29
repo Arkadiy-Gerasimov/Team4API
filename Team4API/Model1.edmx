@@ -1,0 +1,710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Inventory_ItemsModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Act">
+          <Key>
+            <PropertyRef Name="number_act" />
+          </Key>
+          <Property Name="number_act" Type="int" Nullable="false" />
+          <Property Name="count" Type="int" Nullable="false" />
+          <Property Name="commissioningDate" Type="date" Nullable="false" />
+          <Property Name="ID_product" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Archiev">
+          <Key>
+            <PropertyRef Name="ArchiveID" />
+          </Key>
+          <Property Name="ArchiveID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="number_act" Type="int" />
+          <Property Name="ArchivationDate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID_category" />
+          </Key>
+          <Property Name="ID_category" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="ID_company" />
+          </Key>
+          <Property Name="ID_company" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Division">
+          <Key>
+            <PropertyRef Name="ID_division" />
+          </Key>
+          <Property Name="ID_division" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ID_product" />
+          </Key>
+          <Property Name="ID_product" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ID_category" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product_map">
+          <Key>
+            <PropertyRef Name="inventory_number" />
+          </Key>
+          <Property Name="inventory_number" Type="bigint" Nullable="false" />
+          <Property Name="serial_number" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="number_act" Type="int" Nullable="false" />
+          <Property Name="specifications" Type="nvarchar" MaxLength="1000" />
+          <Property Name="ID_responsible_persons" Type="int" Nullable="false" />
+          <Property Name="ID_status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Responsible_persons">
+          <Key>
+            <PropertyRef Name="ID_responsible_persons" />
+          </Key>
+          <Property Name="ID_responsible_persons" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="patronymic" Type="nvarchar" MaxLength="50" />
+          <Property Name="FIO" Type="nvarchar" MaxLength="152" StoreGeneratedPattern="Computed" />
+          <Property Name="ID_company" Type="int" />
+          <Property Name="ID_division" Type="int" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="ID_status" />
+          </Key>
+          <Property Name="ID_status" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Story">
+          <Key>
+            <PropertyRef Name="StoryID" />
+          </Key>
+          <Property Name="StoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="inventory_number" Type="bigint" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="ChangedDate" Type="datetime" />
+          <Property Name="number_act" Type="int" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID_user" />
+          </Key>
+          <Property Name="ID_user" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="patronymic" Type="nvarchar" MaxLength="50" />
+          <Property Name="login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Act_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Act" Type="Self.Act" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ID_product" />
+            </Principal>
+            <Dependent Role="Act">
+              <PropertyRef Name="ID_product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Archiev_Act">
+          <End Role="Act" Type="Self.Act" Multiplicity="0..1" />
+          <End Role="Archiev" Type="Self.Archiev" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Act">
+              <PropertyRef Name="number_act" />
+            </Principal>
+            <Dependent Role="Archiev">
+              <PropertyRef Name="number_act" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID_category" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ID_category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_map_Act">
+          <End Role="Act" Type="Self.Act" Multiplicity="1" />
+          <End Role="Product_map" Type="Self.Product_map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Act">
+              <PropertyRef Name="number_act" />
+            </Principal>
+            <Dependent Role="Product_map">
+              <PropertyRef Name="number_act" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_map_Responsible_persons">
+          <End Role="Responsible_persons" Type="Self.Responsible_persons" Multiplicity="1" />
+          <End Role="Product_map" Type="Self.Product_map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Responsible_persons">
+              <PropertyRef Name="ID_responsible_persons" />
+            </Principal>
+            <Dependent Role="Product_map">
+              <PropertyRef Name="ID_responsible_persons" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_map_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Product_map" Type="Self.Product_map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="ID_status" />
+            </Principal>
+            <Dependent Role="Product_map">
+              <PropertyRef Name="ID_status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Responsible_persons_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="Responsible_persons" Type="Self.Responsible_persons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID_company" />
+            </Principal>
+            <Dependent Role="Responsible_persons">
+              <PropertyRef Name="ID_company" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Responsible_persons_Division">
+          <End Role="Division" Type="Self.Division" Multiplicity="0..1" />
+          <End Role="Responsible_persons" Type="Self.Responsible_persons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Division">
+              <PropertyRef Name="ID_division" />
+            </Principal>
+            <Dependent Role="Responsible_persons">
+              <PropertyRef Name="ID_division" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Story_Act">
+          <End Role="Act" Type="Self.Act" Multiplicity="0..1" />
+          <End Role="Story" Type="Self.Story" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Act">
+              <PropertyRef Name="number_act" />
+            </Principal>
+            <Dependent Role="Story">
+              <PropertyRef Name="number_act" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Story_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="0..1" />
+          <End Role="Story" Type="Self.Story" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="ID_status" />
+            </Principal>
+            <Dependent Role="Story">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище Inventory_ItemsModelContainer">
+          <EntitySet Name="Act" EntityType="Self.Act" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Archiev" EntityType="Self.Archiev" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Division" EntityType="Self.Division" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product_map" EntityType="Self.Product_map" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Responsible_persons" EntityType="Self.Responsible_persons" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Story" EntityType="Self.Story" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Act_Product" Association="Self.FK_Act_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Act" EntitySet="Act" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Archiev_Act" Association="Self.FK_Archiev_Act">
+            <End Role="Act" EntitySet="Act" />
+            <End Role="Archiev" EntitySet="Archiev" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_map_Act" Association="Self.FK_Product_map_Act">
+            <End Role="Act" EntitySet="Act" />
+            <End Role="Product_map" EntitySet="Product_map" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_map_Responsible_persons" Association="Self.FK_Product_map_Responsible_persons">
+            <End Role="Responsible_persons" EntitySet="Responsible_persons" />
+            <End Role="Product_map" EntitySet="Product_map" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_map_Status" Association="Self.FK_Product_map_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Product_map" EntitySet="Product_map" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Responsible_persons_Company" Association="Self.FK_Responsible_persons_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Responsible_persons" EntitySet="Responsible_persons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Responsible_persons_Division" Association="Self.FK_Responsible_persons_Division">
+            <End Role="Division" EntitySet="Division" />
+            <End Role="Responsible_persons" EntitySet="Responsible_persons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Story_Act" Association="Self.FK_Story_Act">
+            <End Role="Act" EntitySet="Act" />
+            <End Role="Story" EntitySet="Story" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Story_Status" Association="Self.FK_Story_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Story" EntitySet="Story" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Inventory_ItemsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Act">
+          <Key>
+            <PropertyRef Name="number_act" />
+          </Key>
+          <Property Name="number_act" Type="Int32" Nullable="false" />
+          <Property Name="count" Type="Int32" Nullable="false" />
+          <Property Name="commissioningDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ID_product" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Act_Product" FromRole="Act" ToRole="Product" />
+          <NavigationProperty Name="Archiev" Relationship="Self.FK_Archiev_Act" FromRole="Act" ToRole="Archiev" />
+          <NavigationProperty Name="Product_map" Relationship="Self.FK_Product_map_Act" FromRole="Act" ToRole="Product_map" />
+          <NavigationProperty Name="Story" Relationship="Self.FK_Story_Act" FromRole="Act" ToRole="Story" />
+        </EntityType>
+        <EntityType Name="Archiev">
+          <Key>
+            <PropertyRef Name="ArchiveID" />
+          </Key>
+          <Property Name="ArchiveID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="number_act" Type="Int32" />
+          <Property Name="ArchivationDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Act" Relationship="Self.FK_Archiev_Act" FromRole="Archiev" ToRole="Act" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID_category" />
+          </Key>
+          <Property Name="ID_category" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Product_Category" FromRole="Category" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="ID_company" />
+          </Key>
+          <Property Name="ID_company" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Responsible_persons" Relationship="Self.FK_Responsible_persons_Company" FromRole="Company" ToRole="Responsible_persons" />
+        </EntityType>
+        <EntityType Name="Division">
+          <Key>
+            <PropertyRef Name="ID_division" />
+          </Key>
+          <Property Name="ID_division" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Responsible_persons" Relationship="Self.FK_Responsible_persons_Division" FromRole="Division" ToRole="Responsible_persons" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ID_product" />
+          </Key>
+          <Property Name="ID_product" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID_category" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Act" Relationship="Self.FK_Act_Product" FromRole="Product" ToRole="Act" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Product_Category" FromRole="Product" ToRole="Category" />
+        </EntityType>
+        <EntityType Name="Product_map">
+          <Key>
+            <PropertyRef Name="inventory_number" />
+          </Key>
+          <Property Name="inventory_number" Type="Int64" Nullable="false" />
+          <Property Name="serial_number" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="number_act" Type="Int32" Nullable="false" />
+          <Property Name="specifications" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ID_responsible_persons" Type="Int32" Nullable="false" />
+          <Property Name="ID_status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Act" Relationship="Self.FK_Product_map_Act" FromRole="Product_map" ToRole="Act" />
+          <NavigationProperty Name="Responsible_persons" Relationship="Self.FK_Product_map_Responsible_persons" FromRole="Product_map" ToRole="Responsible_persons" />
+          <NavigationProperty Name="Status" Relationship="Self.FK_Product_map_Status" FromRole="Product_map" ToRole="Status" />
+        </EntityType>
+        <EntityType Name="Responsible_persons">
+          <Key>
+            <PropertyRef Name="ID_responsible_persons" />
+          </Key>
+          <Property Name="ID_responsible_persons" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FIO" Type="String" MaxLength="152" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="ID_company" Type="Int32" />
+          <Property Name="ID_division" Type="Int32" />
+          <NavigationProperty Name="Company" Relationship="Self.FK_Responsible_persons_Company" FromRole="Responsible_persons" ToRole="Company" />
+          <NavigationProperty Name="Division" Relationship="Self.FK_Responsible_persons_Division" FromRole="Responsible_persons" ToRole="Division" />
+          <NavigationProperty Name="Product_map" Relationship="Self.FK_Product_map_Responsible_persons" FromRole="Responsible_persons" ToRole="Product_map" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="ID_status" />
+          </Key>
+          <Property Name="ID_status" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Product_map" Relationship="Self.FK_Product_map_Status" FromRole="Status" ToRole="Product_map" />
+          <NavigationProperty Name="Story" Relationship="Self.FK_Story_Status" FromRole="Status" ToRole="Story" />
+        </EntityType>
+        <EntityType Name="Story">
+          <Key>
+            <PropertyRef Name="StoryID" />
+          </Key>
+          <Property Name="StoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="inventory_number" Type="Int64" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="ChangedDate" Type="DateTime" Precision="3" />
+          <Property Name="number_act" Type="Int32" />
+          <NavigationProperty Name="Act" Relationship="Self.FK_Story_Act" FromRole="Story" ToRole="Act" />
+          <NavigationProperty Name="Status" Relationship="Self.FK_Story_Status" FromRole="Story" ToRole="Status" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID_user" />
+          </Key>
+          <Property Name="ID_user" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Act_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Act" Type="Self.Act" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ID_product" />
+            </Principal>
+            <Dependent Role="Act">
+              <PropertyRef Name="ID_product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Archiev_Act">
+          <End Role="Act" Type="Self.Act" Multiplicity="0..1" />
+          <End Role="Archiev" Type="Self.Archiev" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Act">
+              <PropertyRef Name="number_act" />
+            </Principal>
+            <Dependent Role="Archiev">
+              <PropertyRef Name="number_act" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_map_Act">
+          <End Role="Act" Type="Self.Act" Multiplicity="1" />
+          <End Role="Product_map" Type="Self.Product_map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Act">
+              <PropertyRef Name="number_act" />
+            </Principal>
+            <Dependent Role="Product_map">
+              <PropertyRef Name="number_act" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Story_Act">
+          <End Role="Act" Type="Self.Act" Multiplicity="0..1" />
+          <End Role="Story" Type="Self.Story" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Act">
+              <PropertyRef Name="number_act" />
+            </Principal>
+            <Dependent Role="Story">
+              <PropertyRef Name="number_act" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID_category" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ID_category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Responsible_persons_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="Responsible_persons" Type="Self.Responsible_persons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID_company" />
+            </Principal>
+            <Dependent Role="Responsible_persons">
+              <PropertyRef Name="ID_company" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Responsible_persons_Division">
+          <End Role="Division" Type="Self.Division" Multiplicity="0..1" />
+          <End Role="Responsible_persons" Type="Self.Responsible_persons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Division">
+              <PropertyRef Name="ID_division" />
+            </Principal>
+            <Dependent Role="Responsible_persons">
+              <PropertyRef Name="ID_division" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_map_Responsible_persons">
+          <End Role="Responsible_persons" Type="Self.Responsible_persons" Multiplicity="1" />
+          <End Role="Product_map" Type="Self.Product_map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Responsible_persons">
+              <PropertyRef Name="ID_responsible_persons" />
+            </Principal>
+            <Dependent Role="Product_map">
+              <PropertyRef Name="ID_responsible_persons" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_map_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Product_map" Type="Self.Product_map" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="ID_status" />
+            </Principal>
+            <Dependent Role="Product_map">
+              <PropertyRef Name="ID_status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Story_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="0..1" />
+          <End Role="Story" Type="Self.Story" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="ID_status" />
+            </Principal>
+            <Dependent Role="Story">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Inventory_ItemsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Act" EntityType="Self.Act" />
+          <EntitySet Name="Archiev" EntityType="Self.Archiev" />
+          <EntitySet Name="Category" EntityType="Self.Category" />
+          <EntitySet Name="Company" EntityType="Self.Company" />
+          <EntitySet Name="Division" EntityType="Self.Division" />
+          <EntitySet Name="Product" EntityType="Self.Product" />
+          <EntitySet Name="Product_map" EntityType="Self.Product_map" />
+          <EntitySet Name="Responsible_persons" EntityType="Self.Responsible_persons" />
+          <EntitySet Name="Status" EntityType="Self.Status" />
+          <EntitySet Name="Story" EntityType="Self.Story" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK_Act_Product" Association="Self.FK_Act_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Act" EntitySet="Act" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Archiev_Act" Association="Self.FK_Archiev_Act">
+            <End Role="Act" EntitySet="Act" />
+            <End Role="Archiev" EntitySet="Archiev" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_map_Act" Association="Self.FK_Product_map_Act">
+            <End Role="Act" EntitySet="Act" />
+            <End Role="Product_map" EntitySet="Product_map" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Story_Act" Association="Self.FK_Story_Act">
+            <End Role="Act" EntitySet="Act" />
+            <End Role="Story" EntitySet="Story" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Responsible_persons_Company" Association="Self.FK_Responsible_persons_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Responsible_persons" EntitySet="Responsible_persons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Responsible_persons_Division" Association="Self.FK_Responsible_persons_Division">
+            <End Role="Division" EntitySet="Division" />
+            <End Role="Responsible_persons" EntitySet="Responsible_persons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_map_Responsible_persons" Association="Self.FK_Product_map_Responsible_persons">
+            <End Role="Responsible_persons" EntitySet="Responsible_persons" />
+            <End Role="Product_map" EntitySet="Product_map" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_map_Status" Association="Self.FK_Product_map_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Product_map" EntitySet="Product_map" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Story_Status" Association="Self.FK_Story_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Story" EntitySet="Story" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище Inventory_ItemsModelContainer" CdmEntityContainer="Inventory_ItemsEntities">
+          <EntitySetMapping Name="Act">
+            <EntityTypeMapping TypeName="Inventory_ItemsModel.Act">
+              <MappingFragment StoreEntitySet="Act">
+                <ScalarProperty Name="number_act" ColumnName="number_act" />
+                <ScalarProperty Name="count" ColumnName="count" />
+                <ScalarProperty Name="commissioningDate" ColumnName="commissioningDate" />
+                <ScalarProperty Name="ID_product" ColumnName="ID_product" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Archiev">
+            <EntityTypeMapping TypeName="Inventory_ItemsModel.Archiev">
+              <MappingFragment StoreEntitySet="Archiev">
+                <ScalarProperty Name="ArchiveID" ColumnName="ArchiveID" />
+                <ScalarProperty Name="number_act" ColumnName="number_act" />
+                <ScalarProperty Name="ArchivationDate" ColumnName="ArchivationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Category">
+            <EntityTypeMapping TypeName="Inventory_ItemsModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="ID_category" ColumnName="ID_category" />
+                <ScalarProperty Name="title" ColumnName="title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Company">
+            <EntityTypeMapping TypeName="Inventory_ItemsModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="ID_company" ColumnName="ID_company" />
+                <ScalarProperty Name="title" ColumnName="title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Division">
+            <EntityTypeMapping TypeName="Inventory_ItemsModel.Division">
+              <MappingFragment StoreEntitySet="Division">
+                <ScalarProperty Name="ID_division" ColumnName="ID_division" />
+                <ScalarProperty Name="title" ColumnName="title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="Inventory_ItemsModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ID_product" ColumnName="ID_product" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="ID_category" ColumnName="ID_category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product_map">
+            <EntityTypeMapping TypeName="Inventory_ItemsModel.Product_map">
+              <MappingFragment StoreEntitySet="Product_map">
+                <ScalarProperty Name="inventory_number" ColumnName="inventory_number" />
+                <ScalarProperty Name="serial_number" ColumnName="serial_number" />
+                <ScalarProperty Name="number_act" ColumnName="number_act" />
+                <ScalarProperty Name="specifications" ColumnName="specifications" />
+                <ScalarProperty Name="ID_responsible_persons" ColumnName="ID_responsible_persons" />
+                <ScalarProperty Name="ID_status" ColumnName="ID_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Responsible_persons">
+            <EntityTypeMapping TypeName="Inventory_ItemsModel.Responsible_persons">
+              <MappingFragment StoreEntitySet="Responsible_persons">
+                <ScalarProperty Name="ID_responsible_persons" ColumnName="ID_responsible_persons" />
+                <ScalarProperty Name="surname" ColumnName="surname" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="patronymic" ColumnName="patronymic" />
+                <ScalarProperty Name="FIO" ColumnName="FIO" />
+                <ScalarProperty Name="ID_company" ColumnName="ID_company" />
+                <ScalarProperty Name="ID_division" ColumnName="ID_division" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Status">
+            <EntityTypeMapping TypeName="Inventory_ItemsModel.Status">
+              <MappingFragment StoreEntitySet="Status">
+                <ScalarProperty Name="ID_status" ColumnName="ID_status" />
+                <ScalarProperty Name="title" ColumnName="title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Story">
+            <EntityTypeMapping TypeName="Inventory_ItemsModel.Story">
+              <MappingFragment StoreEntitySet="Story">
+                <ScalarProperty Name="StoryID" ColumnName="StoryID" />
+                <ScalarProperty Name="inventory_number" ColumnName="inventory_number" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ChangedDate" ColumnName="ChangedDate" />
+                <ScalarProperty Name="number_act" ColumnName="number_act" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="Inventory_ItemsModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ID_user" ColumnName="ID_user" />
+                <ScalarProperty Name="surname" ColumnName="surname" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="patronymic" ColumnName="patronymic" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
